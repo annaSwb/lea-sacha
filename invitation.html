@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <title>Invitation | Léa & Sacha</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,600;1,400&family=Montserrat:wght@300;400;600&family=Great+Vibes&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --gold: #B8860B;
+            --gold-light: #D4AF37;
+            --dark-bg: #0a0a0a;
+            --card-bg: rgba(20, 20, 20, 0.85);
+            --text-light: #f4f4f4;
+            --fuchsia: #D82D7E;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
+        body {
+            background-color: var(--dark-bg);
+            color: var(--text-light);
+            font-family: 'Montserrat', sans-serif;
+            overflow-x: hidden;
+            background-image: radial-gradient(circle at center, #1a1a1a 0%, #000000 100%);
+            line-height: 1.5;
+        }
+
+        .cormorant { font-family: 'Cormorant Garamond', serif; }
+        
+        #musicToggle {
+            position: fixed;
+            bottom: calc(25px + env(safe-area-inset-bottom));
+            right: 25px;
+            z-index: 99999;
+            width: 55px;
+            height: 55px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--gold);
+            border-radius: 50%;
+            color: var(--gold);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            backdrop-filter: blur(5px);
+            transition: all 0.4s ease;
+        }
+        #musicToggle.playing {
+            background: var(--gold);
+            color: black;
+            box-shadow: 0 0 20px var(--gold);
+        }
+
+        header {
+            height: 70vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.2), var(--dark-bg)), url('salle.jpeg') no-repeat center center / cover;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .main-title {
+            font-family: 'Great Vibes', cursive;
+            font-size: clamp(3.5rem, 15vw, 6.5rem);
+            color: var(--gold-light);
+            text-shadow: 2px 2px 20px rgba(0,0,0,0.9);
+            margin-bottom: 5px;
+        }
+
+        .container { max-width: 650px; margin: -60px auto 40px; padding: 0 15px; position: relative; z-index: 10; }
+        
+        .wedding-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 40px 25px;
+            margin-bottom: 35px;
+            border: 1px solid rgba(184, 134, 11, 0.3);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            text-align: center;
+            position: relative;
+            backdrop-filter: blur(10px);
+        }
+
+        .card-type { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 5px; color: var(--gold-light); margin-bottom: 15px; }
+        .card-title { font-size: clamp(2rem, 7vw, 2.5rem); color: #fff; margin-bottom: 20px; }
+        
+        .schedule-box {
+            margin: 20px 0;
+            padding: 15px 0;
+            border-top: 1px solid rgba(184, 134, 11, 0.2);
+            border-bottom: 1px solid rgba(184, 134, 11, 0.2);
+        }
+        .schedule-row {
+            display: flex;
+            justify-content: space-between;
+            max-width: 250px;
+            margin: 8px auto;
+            font-size: 1.1rem;
+        }
+        .schedule-label { color: var(--gold-light); font-weight: 300; }
+        .schedule-time { font-weight: 600; color: #fff; }
+
+        .btn-group { display: flex; gap: 12px; justify-content: center; margin-top: 30px; }
+        .btn-action {
+            display: inline-flex; justify-content: center; align-items: center; width: 100%;
+            padding: 16px; background: linear-gradient(45deg, var(--gold), #8B6508);
+            color: white; text-decoration: none; border-radius: 5px;
+            font-weight: 600; text-transform: uppercase; letter-spacing: 2px;
+            border: none; cursor: pointer; transition: 0.3s;
+        }
+        .btn-outline {
+            background: transparent; border: 1px solid var(--gold); color: var(--gold);
+            padding: 12px 20px; font-size: 0.75rem; border-radius: 5px;
+        }
+
+        .image-section { width: 100%; border-radius: 15px; border: 1px solid rgba(184, 134, 11, 0.2); overflow: hidden; margin: 40px 0; }
+        .img-portrait { height: 500px; background: url('fleur.jpeg') no-repeat center center / cover; filter: brightness(0.8); }
+
+        .rsvp-form { text-align: left; margin-top: 25px; }
+        .form-group { margin-bottom: 25px; }
+        label { color: var(--gold-light); font-size: 0.75rem; letter-spacing: 1px; margin-bottom: 8px; display: block; }
+        input, select, textarea { 
+            width: 100%; padding: 12px; background: rgba(255,255,255,0.05); 
+            border: 1px solid rgba(184, 134, 11, 0.2); border-radius: 5px; 
+            color: white; font-family: inherit; 
+        }
+
+        .radio-group { display: flex; gap: 15px; }
+        .radio-item { flex: 1; position: relative; }
+        .radio-item input { display: none; }
+        .radio-item label {
+            background: rgba(255,255,255,0.05); border: 1px solid rgba(184, 134, 11, 0.2);
+            padding: 15px; text-align: center; border-radius: 5px; cursor: pointer; transition: 0.3s;
+            color: white; display: block;
+        }
+        .radio-item input:checked + label {
+            background: var(--gold); color: black; border-color: var(--gold); font-weight: 600;
+        }
+
+        hr { border: 0; border-top: 1px solid rgba(184, 134, 11, 0.2); margin: 30px 0; }
+        footer { text-align: center; padding: 60px 20px; opacity: 0.8; }
+        
+        .reveal { opacity: 0; transform: translateY(30px); transition: 1.2s ease-out; }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+        .petal { position: fixed; background: var(--gold); border-radius: 150% 0 150% 0; opacity: 0; pointer-events: none; z-index: 5000; filter: blur(1px); }
+        @keyframes fall { 0% { transform: translateY(-10vh) rotate(0deg); opacity: 0; } 10% { opacity: 0.5; } 100% { transform: translateY(105vh) translateX(var(--x-end)) rotate(var(--r-end)); opacity: 0; } }
+    </style>
+</head>
+<body>
+
+<button id="musicToggle">🎶</button>
+<audio id="weddingMusic" src="גן עדן.mp3" preload="auto" loop></audio>
+
+<header>
+    <h1 class="main-title">Léa & Sacha</h1>
+    <p class="cormorant" style="font-size: 1.5rem; color: #fff; letter-spacing: 2px;">Sous le regard de Hachem</p>
+</header>
+
+<div class="container">
+    <div class="wedding-card reveal">
+        <p class="card-type">L'Union</p>
+        <h3 class="card-title cormorant">Cérémonie Religieuse</h3>
+        
+        <div style="margin: 20px 0;">
+            <p class="cormorant" style="font-size: 1.3rem; color: #ccc; font-style: italic;">
+                C'est avec une immense joie que nous vous convions à notre Houppa.
+            </p>
+        </div>
+
+        <div class="card-body">
+            <h2 class="great-vibes" style="font-size: 3rem; color: var(--gold-light); margin-bottom: 10px;">La Houppa</h2>
+            <p style="letter-spacing: 3px; font-weight: 300; margin-bottom: 10px;">DIMANCHE 9 AOÛT 2026</p>
+            
+            <div class="schedule-box">
+                <div class="schedule-row">
+                    <span class="schedule-label">Kabalat Panim</span>
+                    <span class="schedule-time">19:30</span>
+                </div>
+                <div class="schedule-row">
+                    <span class="schedule-label">Houppa</span>
+                    <span class="schedule-time">20:30</span>
+                </div>
+            </div>
+
+            <p style="line-height: 1.8; color: #fff;">
+                <strong style="font-size: 1.4rem; color: var(--gold-light);">GAVRIEL</strong><br>
+                HaSport St 4, Ness Ziona<br>
+                Israël<br>
+                
+            </p>
+        </div>
+
+        <div class="btn-group">
+            <a href="https://www.waze.com/ul?ll=31.936667,34.786389&navigate=yes&zoom=17" target="_blank" class="btn-action btn-outline">Itinéraire Waze</a>
+            <button onclick="addToCalendar()" class="btn-action btn-outline">Ajouter au calendrier</button>
+        </div>
+    </div>
+
+    <div class="image-section img-portrait reveal"></div>
+
+    <div class="wedding-card reveal">
+        <p class="card-type">RSVP</p>
+        <h3 class="card-title cormorant">Votre Présence</h3>
+        
+        <form id="rsvpForm" class="rsvp-form">
+            <div class="form-group">
+                <label>NOM & PRÉNOM</label>
+                <input type="text" name="nom_complet" required placeholder="Votre nom ici">
+            </div>
+
+            <hr>
+
+            <div class="form-group">
+                <label>SEREZ-VOUS PARMI NOUS ?</label>
+                <div class="radio-group">
+                    <div class="radio-item">
+                        <input type="radio" name="presence_houppa" value="oui" id="h_oui" required onclick="document.getElementById('section_nombre').style.display='block'">
+                        <label for="h_oui">OUI ✨</label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="radio" name="presence_houppa" value="non" id="h_non" onclick="document.getElementById('section_nombre').style.display='none'">
+                        <label for="h_non">NON 😔</label>
+                    </div>
+                </div>
+            </div>
+
+            <div id="section_nombre" style="display:none; margin-bottom: 25px;">
+                <label>NOMBRE DE CONVIVES</label>
+                <div class="people-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div class="form-group">
+                        <input type="number" name="adultes" min="0" placeholder="Adultes">
+                    </div>
+                    <div class="form-group">
+                        <input type="number" name="enfants" min="0" placeholder="Enfants">
+                    </div>
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="form-group">
+                <label>UN MESSAGE POUR LES MARIÉS ?</label>
+                <textarea name="message" rows="3" placeholder="Votre petit mot..."></textarea>
+            </div>
+
+            <button type="submit" id="submitBtn" class="btn-action">Envoyer ma réponse</button>
+        </form>
+    </div>
+</div>
+
+<footer>
+    <p class="great-vibes" style="font-size: 2rem; color: var(--gold-light);">Léa & Sacha</p>
+    <p style="font-size: 0.7rem; color: #666; letter-spacing: 3px; margin-top: 10px;">09 . 08 . 2026</p>
+</footer>
+
+<script>
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbxB-LVcrop3r2_wlSZU751-yFVYogKH2IZ-mDdvGioFmin-kDBk1KHTvqMtQM69uJi3gw/exec';
+    const form = document.getElementById('rsvpForm');
+    const submitBtn = document.getElementById('submitBtn');
+
+    form.addEventListener('submit', e => {
+        e.preventDefault();
+        submitBtn.disabled = true;
+        submitBtn.innerText = "Envoi...";
+        fetch(scriptURL, { method: 'POST', mode: 'no-cors', body: new FormData(form)})
+            .then(() => {
+                submitBtn.innerText = "Merci ! ✨";
+                submitBtn.style.background = "#2e7d32";
+                alert("Votre réponse a bien été transmise.");
+                form.reset();
+            }).catch(error => {
+                submitBtn.disabled = false;
+                submitBtn.innerText = "Réessayer";
+            });
+    });
+
+    function addToCalendar() {
+        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+        const event = {
+            title: "Mariage Léa & Sacha",
+            start: "20260809T193000",
+            end: "20260810T020000",
+            location: "GAVRIEL, Ness Ziona",
+            gUrl: "https://www.google.com/calendar/render?action=TEMPLATE&text=Mariage+Léa+%26+Sacha&dates=20260809T153000Z/20260809T230000Z&location=Gavriel+Ness+Ziona"
+        };
+        if (isIOS) {
+            const ics = ["BEGIN:VCALENDAR","VERSION:2.0","BEGIN:VEVENT",`DTSTART:${event.start}`,`DTEND:${event.end}`,`SUMMARY:${event.title}`,`LOCATION:${event.location}`,"END:VEVENT","END:VCALENDAR"].join("\n");
+            window.location.href = window.URL.createObjectURL(new Blob([ics], { type: 'text/calendar' }));
+        } else { window.open(event.gUrl, '_blank'); }
+    }
+
+    const audio = document.getElementById('weddingMusic');
+    const musicToggle = document.getElementById('musicToggle');
+    let hasPlayed = false;
+
+    // --- CORRECTION MUSIQUE AU SCROLL/TOUCHER ---
+    function startAudio() {
+        if (!hasPlayed) {
+            audio.play().then(() => {
+                hasPlayed = true;
+                musicToggle.innerText = "💖";
+                musicToggle.classList.add('playing');
+            }).catch(error => {
+                // Si l'autoplay est encore bloqué, on attendra l'appui sur le bouton
+                console.log("Lecture en attente d'interaction");
+            });
+        }
+    }
+
+    // On écoute le scroll, le toucher et le clic sur la page entière
+    window.addEventListener('scroll', startAudio, {once: true});
+    window.addEventListener('touchstart', startAudio, {once: true});
+    window.addEventListener('click', startAudio, {once: true});
+
+    musicToggle.addEventListener('click', (e) => {
+        e.stopPropagation(); // Empêche le déclenchement des listeners globaux ci-dessus
+        if (audio.paused) { 
+            audio.play(); 
+            hasPlayed = true;
+            musicToggle.innerText = "💖"; 
+            musicToggle.classList.add('playing'); 
+        } else { 
+            audio.pause(); 
+            musicToggle.innerText = "🎶"; 
+            musicToggle.classList.remove('playing'); 
+        }
+    });
+    // --- FIN CORRECTION ---
+
+    function reveal() {
+        document.querySelectorAll(".reveal").forEach(el => {
+            if (el.getBoundingClientRect().top < window.innerHeight - 50) el.classList.add("active");
+        });
+    }
+    window.addEventListener("scroll", reveal);
+    reveal();
+
+    function createPetal() {
+        const petal = document.createElement('div');
+        petal.classList.add('petal');
+        const size = Math.random() * 10 + 5;
+        petal.style.width = size + "px";
+        petal.style.height = (size * 1.5) + "px";
+        petal.style.left = Math.random() * window.innerWidth + "px";
+        petal.style.top = "-20px";
+        petal.style.setProperty('--x-end', ((Math.random() - 0.5) * 200) + "px");
+        petal.style.setProperty('--r-end', (Math.random() * 360) + "deg");
+        petal.style.animation = `fall ${Math.random() * 5 + 5}s linear forwards`;
+        document.body.appendChild(petal);
+        setTimeout(() => petal.remove(), 8000);
+    }
+    setInterval(createPetal, 600);
+</script>
+
+</body>
+</html>
